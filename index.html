@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNS Portal - Smart Dummy AI Genie</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f4f4f4; color: #333; }
+h1, h2, h3 { margin-top: 0; }
+header#heroMenu { background: #111; padding: 15px 20px 10px; position: fixed; width: 100%; top: 0; z-index: 5000; text-align: center; }
+header#heroMenu nav { margin-top: 8px; }
+header#heroMenu nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 16px; }
+section { padding: 100px 20px 60px; text-align: center; }
+a.button, button { padding: 14px 28px; background: #28a745; color: white; text-decoration: none; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+a.button:hover, button:hover { background: #218838; }
+#adsproPlayer video, #sampleAdPlayer { width: 100%; max-width: 720px; border-radius: 8px; }
+.popup, #adPreviewPopup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 30px rgba(0,0,0,0.2); z-index: 1000; display: none; animation: popupEntry 0.5s ease forwards; max-width: 90%; text-align: center;}
+#loading-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; text-align: center; padding-top: 40vh; font-size: 24px; }
+#scrollTopBtn { display: none; position: fixed; bottom: 30px; right: 20px; padding: 10px 14px; background: #6f42c1; color: white; border: none; border-radius: 50%; font-size: 20px; z-index: 3000; cursor: pointer; }
+@media (max-width: 768px) { header#heroMenu nav a { margin: 0 10px; font-size: 14px; } section { padding: 80px 10px 40px; } h1 { font-size: 32px; } h2 { font-size: 24px; } h3 { font-size: 20px; } #genieBottle { width: 100px; } }
+@keyframes popupEntry { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body id="top">
+
+<header id="heroMenu">
+  <div style="color: white; font-size: 24px; font-weight: bold;">BNS Portal</div>
+  <nav>
+    <a href="#top">Home</a>
+    <a href="#genie-bottle">Explore</a>
+    <a href="#get-pass">Sign Up</a>
+  </nav>
+</header>
+
+<!-- AdsPro Player -->
+<section style="background: #222; color: white;">
+  <div id="adsproPlayer">
+    <h3>AdsPro Player: Live Ad Content</h3>
+    <video id="adsProVideo" controls muted autoplay playsinline></video>
+  </div>
+</section>
+
+<!-- Hero Section -->
+<section style="background: linear-gradient(#000, #111); color: white;">
+  <h1 id="heroTitle">Connect. Create. Convert.</h1>
+  <p id="heroSubtitle">BNS powers the future of advertising, engagement, and eWallet commerce on CTV and OTT.</p>
+  <a href="#genie-bottle" class="button">Explore Ad Genie</a>
+</section>
+
+<!-- Genie Bottle -->
+<section id="genie-bottle" style="background: #fff8e1;">
+  <img id="genieBottle" src="https://pngimg.com/uploads/aladdin_lamp/aladdin_lamp_PNG27.png" alt="Genie Bottle" style="cursor: pointer;">
+  <h2>Rub the Genie Bottle to Create Your Ad</h2>
+  <p>Unlock magical ad creation — your wish for success is just a rub away.</p>
+</section>
+
+<!-- Free Ad Wizard -->
+<section id="free-ad-wizard">
+  <h2>Start Your Free Ad Genie Creation</h2>
+  <form style="max-width: 600px; margin: auto;">
+    <label>Business Type:</label>
+    <select id="businessType"><option>Restaurant</option><option>Shoe Store</option><option>Dry Cleaner</option><option>Salon</option><option>Other</option></select><br><br>
+    <label>Tone:</label>
+    <select id="tone"><option>Fun</option><option>Serious</option><option>Inspirational</option></select><br><br>
+    <label>Key Phrases:</label>
+    <textarea id="phrases"></textarea><br><br>
+    <button type="button" onclick="captureSelections()">Next Step</button>
+  </form>
+</section>
+
+<section id="choose-style" style="display:none;">
+  <h2>Choose Your Style</h2>
+  <form style="max-width: 600px; margin: auto;">
+    <label>Background Scene:</label>
+    <select id="backgroundScene"><option>Restaurant Kitchen</option><option>Beach</option><option>Office Workspace</option></select><br><br>
+    <label>Character Type:</label>
+    <select id="characterType"><option>Young Female</option><option>Mature Male</option></select><br><br>
+    <label>Preferred Look / Nationality:</label>
+    <select id="nationality"><option>Any</option><option>Hispanic</option><option>African American</option></select><br><br>
+    <button type="button" onclick="showPreview()">Next Step</button>
+  </form>
+</section>
+
+<section id="preview-confirm" style="display:none;">
+  <h2>Preview & Confirm</h2>
+  <div style="background: white; padding: 20px; margin: auto; max-width: 720px;">
+    <p><strong>Business Type:</strong> <span id="preview-businessType"></span></p>
+    <p><strong>Tone:</strong> <span id="preview-tone"></span></p>
+    <p><strong>Key Phrases:</strong> <span id="preview-phrases"></span></p>
+    <p><strong>Background Scene:</strong> <span id="preview-backgroundScene"></span></p>
+    <p><strong>Character Type:</strong> <span id="preview-characterType"></span></p>
+    <p><strong>Preferred Look:</strong> <span id="preview-nationality"></span></p>
+  </div><br>
+  <button type="button" onclick="generateSmartAd()">Generate My Free Sample Ad</button>
+</section>
+
+<!-- Dummy Smart AI Ad Popup -->
+<div id="adPreviewPopup">
+  <h2>Your AI-Generated Ad!</h2>
+  <p id="adContent"></p>
+  <button onclick="location.reload()">✨ Create Another Ad</button>
+</div>
+
+<script>
+let userSelections = {};
+
+function captureSelections() {
+  userSelections.businessType = document.getElementById('businessType').value;
+  userSelections.tone = document.getElementById('tone').value;
+  userSelections.phrases = document.getElementById('phrases').value;
+  document.getElementById('free-ad-wizard').style.display = 'none';
+  document.getElementById('choose-style').style.display = 'block';
+}
+
+function showPreview() {
+  userSelections.backgroundScene = document.getElementById('backgroundScene').value;
+  userSelections.characterType = document.getElementById('characterType').value;
+  userSelections.nationality = document.getElementById('nationality').value;
+  document.getElementById('choose-style').style.display = 'none';
+  document.getElementById('preview-confirm').style.display = 'block';
+
+  document.getElementById('preview-businessType').innerText = userSelections.businessType;
+  document.getElementById('preview-tone').innerText = userSelections.tone;
+  document.getElementById('preview-phrases').innerText = userSelections.phrases;
+  document.getElementById('preview-backgroundScene').innerText = userSelections.backgroundScene;
+  document.getElementById('preview-characterType').innerText = userSelections.characterType;
+  document.getElementById('preview-nationality').innerText = userSelections.nationality;
+}
+
+function generateSmartAd() {
+  const business = userSelections.businessType;
+  const tone = userSelections.tone.toLowerCase();
+  const phrases = userSelections.phrases;
+
+  let intro = (tone === 'fun') ? "Looking for something exciting?" : (tone === 'serious') ? "Trust and reliability you can count on." : "Inspire your day with our service.";
+  let ad = `${intro} Our ${business.toLowerCase()} specializes in ${phrases}. Visit us and experience the difference today!`;
+  
+  document.getElementById('adContent').innerText = ad;
+  document.getElementById('preview-confirm').style.display = 'none';
+  document.getElementById('adPreviewPopup').style.display = 'block';
+}
+
+// Smooth scroll for nav
+document.querySelectorAll('header#heroMenu nav a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href').substring(1);
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
